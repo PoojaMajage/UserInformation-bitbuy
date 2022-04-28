@@ -10,13 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -46,10 +40,10 @@ public class UserController {
     public User login(@RequestBody User user) {
         User userExists = userRepository.findByUsername(user.getUsername());
         if (userExists == null) {
-            throw new UserNotFoundException(user.getUsername());
+            throw new UserNotFoundException(userExists.getUsername());
         }
-        user.setToken(getJWTToken(user.getUsername()));
-        return user;
+        userExists.setToken(getJWTToken(userExists.getUsername()));
+        return userExists;
     }
 
     @GetMapping("/api/users/{id}")
